@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Internal;
+using QuotesDemoAPI.Data;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -12,36 +15,85 @@ namespace QuotesDemoAPI.Controllers
     [ApiController]
     public class QuoteController : ControllerBase
     {
-        // GET: api/<QuoteController>
-        [HttpGet]
-        public IEnumerable<string> Get()
+        public ApplicationDbContext _db { get; set; }
+        private Random _rand;
+        public QuoteController(ApplicationDbContext db)
         {
-            return new string[] { "value1", "value2" };
+            _db = db;
         }
 
-        // GET api/<QuoteController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        // GET api/<QuoteController>
+        // get random quote
+        [HttpGet]
+        public ActionResult<Quote> Get() 
         {
-            return "value";
+            _rand = new Random();
+            
+            ////dát do listu a vrátit z listu?
+            //var list = new List<Quote>();
+            //list = _db.Quotes.ToList();
+            
+            int max = _db.Quotes.Count();
+            int rnd = _rand.Next(1, max);
+            
+            return _db.Quotes.Find(rnd);
         }
 
         // POST api/<QuoteController>
+        // insert new quote (without tags)
         [HttpPost]
-        public void Post([FromBody] string value)
+        public ActionResult<Quote> Insert([FromBody] Quote value)
         {
+            if (value == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                _db.Quotes.Add(value);
+                _db.SaveChangesAsync();
+                return _db.Quotes.Find(value.Id);
+            }
         }
 
-        // PUT api/<QuoteController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
+        //// GET api/<QuoteController/5>
+        //// get quote with id 5
+        //[HttpGet("{id}")]
+        //public ActionResult<Quote> Get(int id)
+        //{
 
-        // DELETE api/<QuoteController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
+        //}
+
+        //// DELETE api/<QuoteController>/5
+        //// delete quote with id 5
+        //[HttpDelete("{id?}")]
+        //public ActionResult<Quote> Delete(int id)
+        //{
+
+        //}
+
+        //// POST api/<QuoteController/5/tags>
+        //// link new tags with quote 5
+        //[HttpPost("{id}/tags")]
+        //public ActionResult<IEnumerable<Tag>> InsertTags(int id, [FromBody] IEnumerable<int> tagIds)
+        //{
+
+        //}
+
+        //// DELETE api/<QuoteController/5/tags>
+        //// unlink tags connected with quote 5
+        //[HttpDelete("{id}/tags")]
+        //public ActionResult<IEnumerable<Tag>> DeleteTags(int id, [FromBody] IEnumerable<int> tagIds)
+        //{
+
+        //}
+
+        //// GET api/<QuoteController/5/tags>
+        //// get linked tags with quote 5
+        //[HttpGet("{id}/tags")]
+        //public ActionResult<IEnumerable<Tag>> GetTags(int id)
+        //{
+
+        //}
     }
 }
