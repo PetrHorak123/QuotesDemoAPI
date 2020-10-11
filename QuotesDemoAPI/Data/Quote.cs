@@ -15,6 +15,6 @@ namespace QuotesDemoAPI.Data
         public DateTime Date { get; set; }
         
         
-        public ICollection<TagQuote> Tags { get; set; }
+        public ICollection<TagQuote> TagQuotes { get; set; }
     }
 }

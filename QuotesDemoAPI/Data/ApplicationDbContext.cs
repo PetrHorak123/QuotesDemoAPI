@@ -23,11 +23,17 @@ namespace QuotesDemoAPI.Data
 
             modelBuilder.Entity<Quote>().HasData(new Quote { Id = 1, Text = "Čím víc sebevrahů, tím míň sebevrahů." });
             modelBuilder.Entity<Tag>().HasData(new Tag { Id = 1, Name = "Anonym", Category = Category.Author });
-            modelBuilder.Entity<TagQuote>().HasOne(tq => tq.Tag).WithMany(t => t.Quotes).HasForeignKey(t => t.TagId).OnDelete(DeleteBehavior.Cascade);
-            modelBuilder.Entity<TagQuote>().HasKey(tq => new { tq.TagId, tq.QuoteId });
-
-            //modelBuilder.Entity<Quote>
-
+          
+            modelBuilder.Entity<TagQuote>()
+                .HasKey(tq => new { tq.TagId, tq.QuoteId });                     
+            modelBuilder.Entity<TagQuote>()
+                .HasOne(tq => tq.Tag)
+                .WithMany(t => t.TagQuotes)
+                .HasForeignKey(t => t.TagId);
+            modelBuilder.Entity<TagQuote>()
+                .HasOne(tq => tq.Quote)
+                .WithMany(q => q.TagQuotes)
+                .HasForeignKey(q => q.QuoteId);
 
         }
     }

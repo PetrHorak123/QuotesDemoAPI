@@ -14,6 +14,6 @@ namespace QuotesDemoAPI.Data
         public Category Category { get; set; }
 
 
-        public ICollection<TagQuote> Quotes { get; set; }
+        public ICollection<TagQuote> TagQuotes { get; set; }
     }
 }

@@ -9,14 +9,15 @@ namespace QuotesDemoAPI.Data
 {
     public class TagQuote
     {
-        
-
-        [ForeignKey("Quote")]
+       
+        //[Key]
         public int QuoteId { get; set; }
+        //[ForeignKey("QuoteId")]
         public Quote Quote { get; set; }
 
-        [ForeignKey("Tag")]
+        //[Key]
         public int TagId { get; set; }
+        //[ForeignKey("TagId")]
         public Tag Tag { get; set; }
     }
 }
