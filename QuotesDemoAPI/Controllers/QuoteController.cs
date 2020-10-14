@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using QuotesDemoAPI.Data;
 
@@ -28,11 +29,7 @@ namespace QuotesDemoAPI.Controllers
         public ActionResult<Quote> Get() 
         {
             _rand = new Random();
-            
-            ////dát do listu a vrátit z listu?
-            //var list = new List<Quote>();
-            //list = _db.Quotes.ToList();
-            
+                      
             int max = _db.Quotes.Count();
             int rnd = _rand.Next(1, max);
             
@@ -51,49 +48,112 @@ namespace QuotesDemoAPI.Controllers
             else
             {
                 _db.Quotes.Add(value);
-                _db.SaveChangesAsync();
+                _db.SaveChanges();
+                
+                //kontrola
                 return _db.Quotes.Find(value.Id);
             }
         }
 
-        //// GET api/<QuoteController/5>
-        //// get quote with id 5
-        //[HttpGet("{id}")]
-        //public ActionResult<Quote> Get(int id)
-        //{
+        // GET api/<QuoteController/5>
+        // get quote with id 5
+        [HttpGet("{id}")]
+        public ActionResult<Quote> Get(int id)
+        {
+            if (_db.Quotes.Contains(new Quote { Id = id}))
+            {
+                return _db.Quotes.Find(id);
+            }
+            else
+            {
+                return NotFound();
+            }
+            
+        }
 
-        //}
+        // DELETE api/<QuoteController>/5
+        // delete quote with id 5
+        [HttpDelete("{id?}")]
+        public ActionResult<Quote> Delete(int id)
+        {
+            if (_db.Quotes.Contains(new Quote { Id = id }))
+            {
+                _db.Quotes.Remove(_db.Quotes.Find(id));
+                _db.SaveChanges();
+                return Accepted();
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
 
-        //// DELETE api/<QuoteController>/5
-        //// delete quote with id 5
-        //[HttpDelete("{id?}")]
-        //public ActionResult<Quote> Delete(int id)
-        //{
 
-        //}
+        //OTESTOVAT 
 
-        //// POST api/<QuoteController/5/tags>
-        //// link new tags with quote 5
-        //[HttpPost("{id}/tags")]
-        //public ActionResult<IEnumerable<Tag>> InsertTags(int id, [FromBody] IEnumerable<int> tagIds)
-        //{
+        // POST api/<QuoteController/5/tags>
+        // link new tags with quote 5
+        [HttpPost("{id}/tags")]
+        public ActionResult<IEnumerable<Tag>> InsertTags(int id, [FromBody] IEnumerable<int> tagIds)
+        {
+            if (_db.Quotes.Contains(new Quote { Id = id }))
+            {
+                var quote = _db.Quotes.Find(id);
+                foreach (var item in tagIds)
+                {
+                    var tag = _db.Tags.Find(item);
+                    _db.TagQuotes.Add(new TagQuote { Tag = tag, Quote = quote });
+                }
+                _db.SaveChanges();
+                return Accepted();
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
 
-        //}
+        // DELETE api/<QuoteController/5/tags>
+        // unlink tags connected with quote 5
+        [HttpDelete("{id}/tags")]
+        public ActionResult<IEnumerable<Tag>> DeleteTags(int id, [FromBody] IEnumerable<int> tagIds)
+        {
+            if (_db.Quotes.Contains(new Quote { Id = id }))
+            {
+                
+                foreach (var item in tagIds)
+                {
+                    var tag = _db.Tags.Find(item);
+                    _db.TagQuotes.Remove(_db.TagQuotes.Where(x => x.QuoteId == id).SingleOrDefault(x => x.Tag == tag));
+                }
+                _db.SaveChanges();
+                return Accepted();
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
 
-        //// DELETE api/<QuoteController/5/tags>
-        //// unlink tags connected with quote 5
-        //[HttpDelete("{id}/tags")]
-        //public ActionResult<IEnumerable<Tag>> DeleteTags(int id, [FromBody] IEnumerable<int> tagIds)
-        //{
-
-        //}
-
-        //// GET api/<QuoteController/5/tags>
-        //// get linked tags with quote 5
-        //[HttpGet("{id}/tags")]
-        //public ActionResult<IEnumerable<Tag>> GetTags(int id)
-        //{
-
-        //}
+        // GET api/<QuoteController/5/tags>
+        // get linked tags with quote 5
+        [HttpGet("{id}/tags")]
+        public ActionResult<IEnumerable<Tag>> GetTags(int id)
+        {
+            if (_db.Quotes.Contains(new Quote { Id = id }))
+            {
+                var quote = _db.Quotes.Include(x => x.TagQuotes).SingleOrDefault(x => x.Id == id);
+                List<Tag> tags = new List<Tag>();
+                foreach (var item in quote.TagQuotes)
+                {
+                    tags.Add(item.Tag);
+                }
+                return tags;
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
     }
 }

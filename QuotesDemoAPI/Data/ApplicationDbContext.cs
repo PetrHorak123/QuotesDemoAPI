@@ -35,11 +35,13 @@ namespace QuotesDemoAPI.Data
             modelBuilder.Entity<TagQuote>()
                 .HasOne(tq => tq.Tag)
                 .WithMany(t => t.TagQuotes)
-                .HasForeignKey(t => t.TagId);
+                .HasForeignKey(t => t.TagId)
+                .OnDelete(DeleteBehavior.Cascade);
             modelBuilder.Entity<TagQuote>()
                 .HasOne(tq => tq.Quote)
                 .WithMany(q => q.TagQuotes)
-                .HasForeignKey(q => q.QuoteId);
+                .HasForeignKey(q => q.QuoteId)
+                .OnDelete(DeleteBehavior.Cascade); 
 
         }
     }
