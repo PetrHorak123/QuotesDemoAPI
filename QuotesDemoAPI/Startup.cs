@@ -78,8 +78,9 @@ namespace QuotesDemoAPI
                 };
             });
 
-            services.AddControllersWithViews();
-            services.AddRazorPages();
+            services.AddSwaggerGen();
+
+            services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -124,6 +125,11 @@ namespace QuotesDemoAPI
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c => {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "EndPoint Documentation");
+            });
 
             app.UseEndpoints(endpoints =>
             {
