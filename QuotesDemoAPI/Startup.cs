@@ -39,7 +39,7 @@ namespace QuotesDemoAPI
             //services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true) 
             //    .AddEntityFrameworkStores<ApplicationDbContext>();
 
-            services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
+            services.AddDefaultIdentity<IdentityUser>(options =>
             {
                 options.SignIn.RequireConfirmedAccount = false;
                 options.Password.RequiredLength = 6;
@@ -80,7 +80,8 @@ namespace QuotesDemoAPI
 
             services.AddSwaggerGen();
 
-            services.AddControllers();
+            services.AddControllersWithViews();
+            services.AddRazorPages();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -10,8 +10,8 @@ using QuotesDemoAPI.Data;
 namespace QuotesDemoAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201011163317_prvni")]
-    partial class prvni
+    [Migration("20201022112837_Prvni")]
+    partial class Prvni
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -244,6 +244,30 @@ namespace QuotesDemoAPI.Migrations
                             Id = 1,
                             Date = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Text = "Čím víc sebevrahů, tím míň sebevrahů."
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Date = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Text = "test 1"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Date = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Text = "test 2"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Date = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Text = "test 3"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Date = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Text = "test 4"
                         });
                 });
 
@@ -269,7 +293,19 @@ namespace QuotesDemoAPI.Migrations
                         {
                             Id = 1,
                             Category = 0,
-                            Name = "Anonym"
+                            Name = "TestTag1"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Category = 1,
+                            Name = "TestTag2"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Category = 0,
+                            Name = "TestTag3"
                         });
                 });
 

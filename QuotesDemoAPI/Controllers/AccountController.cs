@@ -21,10 +21,10 @@ namespace QuotesDemoAPI.Controllers
     public class AccountController : ControllerBase
     {
         private IConfiguration _config;
-        private UserManager<ApplicationUser> _userManager;
-        private SignInManager<ApplicationUser> _signInManager;
+        private UserManager<IdentityUser> _userManager;
+        private SignInManager<IdentityUser> _signInManager;
 
-        public AccountController(IConfiguration config, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        public AccountController(IConfiguration config, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
         {
             _config = config;
             _userManager = userManager;
@@ -75,8 +75,8 @@ namespace QuotesDemoAPI.Controllers
             {
                 return BadRequest("user already registered");
             }
-            var hasher = new PasswordHasher<ApplicationUser>();
-            var newUser = new ApplicationUser
+            var hasher = new PasswordHasher<IdentityUser>();
+            var newUser = new IdentityUser
             {
                 UserName = userData.Email,
                 Email = userData.Email,
@@ -107,7 +107,7 @@ namespace QuotesDemoAPI.Controllers
             return Unauthorized();
         }
 
-        private AuthorizationToken GenerateJSONWebToken(ApplicationUser user)
+        private AuthorizationToken GenerateJSONWebToken(IdentityUser user)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace QuotesDemoAPI.Migrations
 {
-    public partial class prvni : Migration
+    public partial class Prvni : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -207,12 +207,24 @@ namespace QuotesDemoAPI.Migrations
             migrationBuilder.InsertData(
                 table: "Quotes",
                 columns: new[] { "Id", "Date", "Text" },
-                values: new object[] { 1, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Čím víc sebevrahů, tím míň sebevrahů." });
+                values: new object[,]
+                {
+                    { 1, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Čím víc sebevrahů, tím míň sebevrahů." },
+                    { 2, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "test 1" },
+                    { 3, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "test 2" },
+                    { 4, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "test 3" },
+                    { 5, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "test 4" }
+                });
 
             migrationBuilder.InsertData(
                 table: "Tags",
                 columns: new[] { "Id", "Category", "Name" },
-                values: new object[] { 1, 0, "Anonym" });
+                values: new object[,]
+                {
+                    { 1, 0, "TestTag1" },
+                    { 2, 1, "TestTag2" },
+                    { 3, 0, "TestTag3" }
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
